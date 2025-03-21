@@ -52,3 +52,32 @@ db-setup: check-flox
     @createdb catcolab 2>/dev/null || echo "Database exists"
     @cd packages/backend && cargo sqlx migrate run || echo "Run 'cargo install sqlx-cli' if this fails"
     @echo "[OK] Database ready! You can now run 'just run'"
+
+# Full deploy from scratch with local components
+deploy-local: check-deps install-wasm build-wasm setup db-setup run
+
+# Check for required dependencies
+check-deps:
+    @echo "Checking dependencies..."
+    @command -v node >/dev/null 2>&1 || { echo "[ERROR] Node.js not found"; exit 1; }
+    @command -v cargo >/dev/null 2>&1 || { echo "[ERROR] Rust not found. Install from https://rustup.rs"; exit 1; }
+    @command -v psql >/dev/null 2>&1 || { echo "[WARNING] PostgreSQL not found. Required for database features."; }
+    @echo "[OK] All core dependencies found"
+
+# Install wasm-pack if not installed
+install-wasm:
+    @echo "Checking for wasm-pack..."
+    @command -v wasm-pack >/dev/null 2>&1 || { echo "Installing wasm-pack..."; curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh; }
+    @echo "[OK] wasm-pack is installed"
+
+# Build WebAssembly components
+build-wasm:
+    @echo "Building WebAssembly components..."
+    @cd packages/catlog-wasm && wasm-pack build
+    @echo "[OK] WebAssembly components built"
+
+# Build the project for production
+build: check-flox build-wasm
+    @echo "Building project for production..."
+    @cd packages/frontend && pnpm run build || npm run build
+    @echo "[OK] Build complete!"

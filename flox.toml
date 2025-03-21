@@ -1,0 +1,11 @@
+[env]
+packages = [
+  "rust-nightly",
+  "pnpm",
+  "postgresql",
+  "wasm-pack",
+  "node",
+  "cargo-watch",
+  "just",
+  "sqlx-cli"
+]
