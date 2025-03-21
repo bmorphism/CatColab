@@ -3,14 +3,29 @@
   "manifest": {
     "version": 1,
     "install": {
+      "act": {
+        "pkg-path": "act"
+      },
+      "babashka": {
+        "pkg-path": "babashka"
+      },
       "cargo": {
         "pkg-path": "cargo"
       },
       "just": {
         "pkg-path": "just"
       },
+      "netcat": {
+        "pkg-path": "netcat"
+      },
       "nodejs": {
         "pkg-path": "nodejs"
+      },
+      "pnpm": {
+        "pkg-path": "pnpm"
+      },
+      "postgresql": {
+        "pkg-path": "postgresql"
       },
       "wasm-pack": {
         "pkg-path": "wasm-pack"
@@ -34,6 +49,238 @@
     }
   },
   "packages": [
+    {
+      "attr_path": "act",
+      "broken": false,
+      "derivation": "/nix/store/h1rrlkkyax55jg1daiyzjaizkmdc73i5-act-0.2.75.drv",
+      "description": "Run your GitHub Actions locally",
+      "install_id": "act",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "act-0.2.75",
+      "pname": "act",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.2.75",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/qcgqw32ls6i8h8zn5n57m2xb22k4p4l9-act-0.2.75"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "act",
+      "broken": false,
+      "derivation": "/nix/store/7yssv9dyrz0j4scgz21wbjlgf9xddqfh-act-0.2.75.drv",
+      "description": "Run your GitHub Actions locally",
+      "install_id": "act",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "act-0.2.75",
+      "pname": "act",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.2.75",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/s6l244rv3j2a28n5c1fzznjbp1phsicy-act-0.2.75"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "act",
+      "broken": false,
+      "derivation": "/nix/store/5ci6x3isj79qjk3dkcj7fzf0q4cbjy1b-act-0.2.75.drv",
+      "description": "Run your GitHub Actions locally",
+      "install_id": "act",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "act-0.2.75",
+      "pname": "act",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.2.75",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/j2mvzys9389h575mn5wml8jv6ji29d49-act-0.2.75"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "act",
+      "broken": false,
+      "derivation": "/nix/store/m01wd6sfl5m2jv456cl4zx6x84wpqdch-act-0.2.75.drv",
+      "description": "Run your GitHub Actions locally",
+      "install_id": "act",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "act-0.2.75",
+      "pname": "act",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.2.75",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/qc48irp0s32rx3n326f0iplh7q9ik4jj-act-0.2.75"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "babashka",
+      "broken": false,
+      "derivation": "/nix/store/y2xlsgs10xaj31nrz92v1ivyxlc4vpmq-babashka-1.12.196.drv",
+      "description": "Clojure babushka for the grey areas of Bash",
+      "install_id": "babashka",
+      "license": "EPL-1.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "babashka-1.12.196",
+      "pname": "babashka",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.12.196",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/a0hwcdrzahisvir69ga0p5wrmq3pw8c4-babashka-1.12.196"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "babashka",
+      "broken": false,
+      "derivation": "/nix/store/sawgsn156cw0d0gv67irfa4j6gz3jvfx-babashka-1.12.196.drv",
+      "description": "Clojure babushka for the grey areas of Bash",
+      "install_id": "babashka",
+      "license": "EPL-1.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "babashka-1.12.196",
+      "pname": "babashka",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.12.196",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/i6891a011vn3q9wpxkq2wn0092g8rsr5-babashka-1.12.196"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "babashka",
+      "broken": false,
+      "derivation": "/nix/store/i1gp88ap1hh6rba2csxry6mvpw5xx14m-babashka-1.12.196.drv",
+      "description": "Clojure babushka for the grey areas of Bash",
+      "install_id": "babashka",
+      "license": "EPL-1.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "babashka-1.12.196",
+      "pname": "babashka",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.12.196",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/ppkms9l5zfzn0178l8dyxqra7vrb1rr7-babashka-1.12.196"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "babashka",
+      "broken": false,
+      "derivation": "/nix/store/d8kxfy12xb71iidycy86gsh7rp9v4xwp-babashka-1.12.196.drv",
+      "description": "Clojure babushka for the grey areas of Bash",
+      "install_id": "babashka",
+      "license": "EPL-1.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "babashka-1.12.196",
+      "pname": "babashka",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.12.196",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/scmhjf743dixj5vdl16fxa5dzc7j4l2b-babashka-1.12.196"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
     {
       "attr_path": "cargo",
       "broken": false,
@@ -279,6 +526,142 @@
       "priority": 5
     },
     {
+      "attr_path": "netcat",
+      "broken": false,
+      "derivation": "/nix/store/k9khgl36syi5mx96j95ybf14gpxpyjsi-libressl-4.0.0.drv",
+      "description": "Free TLS/SSL implementation",
+      "install_id": "netcat",
+      "license": "[ Public Domain, BSD-4-Clause, 0BSD, BSD-3-Clause, GPL-3.0, ISC, OpenSSL ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "libressl-4.0.0",
+      "pname": "netcat",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.0.0",
+      "outputs_to_install": [
+        "bin",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/ih24csnpkij0rzr5b9cz744371zsn9jf-libressl-4.0.0-bin",
+        "dev": "/nix/store/f73j8xz6yb10jpm2n8wa09ymbc92h4m6-libressl-4.0.0-dev",
+        "man": "/nix/store/52yr82fnfjq3x243xyfdafvyshlj8ksb-libressl-4.0.0-man",
+        "nc": "/nix/store/m9d3xhr535hxwa68kdrq9192rqnlyiiz-libressl-4.0.0-nc",
+        "out": "/nix/store/lzv4z9p0rq14119k4jjs316xr9kgc4f8-libressl-4.0.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "netcat",
+      "broken": false,
+      "derivation": "/nix/store/2darga07w36vwxwnfarpnzl2pb02vls8-libressl-4.0.0.drv",
+      "description": "Free TLS/SSL implementation",
+      "install_id": "netcat",
+      "license": "[ Public Domain, BSD-4-Clause, 0BSD, BSD-3-Clause, GPL-3.0, ISC, OpenSSL ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "libressl-4.0.0",
+      "pname": "netcat",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.0.0",
+      "outputs_to_install": [
+        "bin",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/44vkf2bb3bzmdjxp5v0lzkhjk08h8wdh-libressl-4.0.0-bin",
+        "dev": "/nix/store/3l5iwa09737b55pgbjnhsbxhvv8fkc7v-libressl-4.0.0-dev",
+        "man": "/nix/store/19giyqi33pa1jayqsmj6kh218wl52hv2-libressl-4.0.0-man",
+        "nc": "/nix/store/dhcdi1k5j73pmqxii7f43294b1qd156k-libressl-4.0.0-nc",
+        "out": "/nix/store/m8jia851vq74fgj5xn1wibvdl9g00w09-libressl-4.0.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "netcat",
+      "broken": false,
+      "derivation": "/nix/store/di5ifw9kd7xbnkp84r5kidnv856bh61n-libressl-4.0.0.drv",
+      "description": "Free TLS/SSL implementation",
+      "install_id": "netcat",
+      "license": "[ Public Domain, BSD-4-Clause, 0BSD, BSD-3-Clause, GPL-3.0, ISC, OpenSSL ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "libressl-4.0.0",
+      "pname": "netcat",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.0.0",
+      "outputs_to_install": [
+        "bin",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/08m19wkb79yxib19wyyx8mjd5f9arkmf-libressl-4.0.0-bin",
+        "dev": "/nix/store/gcik0c4p36d2rdi1x7pjhg67phm58gvf-libressl-4.0.0-dev",
+        "man": "/nix/store/kn0hd69aazg4l55lp6v8ap6s8z9p6iw2-libressl-4.0.0-man",
+        "nc": "/nix/store/3ykpbi80rim9i9sd2zmb9zfpv4gih3pg-libressl-4.0.0-nc",
+        "out": "/nix/store/yzvlyry9wi23kc8flhnacg4sjjk8yxvg-libressl-4.0.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "netcat",
+      "broken": false,
+      "derivation": "/nix/store/37mgl21fy3darjfb835ypnkd0zbbs1vn-libressl-4.0.0.drv",
+      "description": "Free TLS/SSL implementation",
+      "install_id": "netcat",
+      "license": "[ Public Domain, BSD-4-Clause, 0BSD, BSD-3-Clause, GPL-3.0, ISC, OpenSSL ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "libressl-4.0.0",
+      "pname": "netcat",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.0.0",
+      "outputs_to_install": [
+        "bin",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/lsx668vvfgqfhi6027ni96x7lnp61m2p-libressl-4.0.0-bin",
+        "dev": "/nix/store/w5dxx8i68xvx8kjm3abhsbxdml67xbwf-libressl-4.0.0-dev",
+        "man": "/nix/store/9ad67np16srlp8361v621s8bkm2ddxd4-libressl-4.0.0-man",
+        "nc": "/nix/store/m83x3xiws8h73znl9wqhwsi1c0xzfhpw-libressl-4.0.0-nc",
+        "out": "/nix/store/s9ichkp0as89rr4s0h1dxgi6kk3bd3p1-libressl-4.0.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
       "attr_path": "nodejs",
       "broken": false,
       "derivation": "/nix/store/0vf1qjh3y9f9f9z6w2rhj69xj3sjlcdq-nodejs-22.14.0.drv",
@@ -393,6 +776,260 @@
       "outputs": {
         "libv8": "/nix/store/hs3x57x6gw75sgwa081d3ir63rz7phmb-nodejs-22.14.0-libv8",
         "out": "/nix/store/87hsv7pc321h80j7223209nxc8vmabqb-nodejs-22.14.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pnpm",
+      "broken": false,
+      "derivation": "/nix/store/3i7wk27bzfpcnplxi5j59mqza2sp375n-pnpm-10.6.3.drv",
+      "description": "Fast, disk space efficient package manager for JavaScript",
+      "install_id": "pnpm",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "pnpm-10.6.3",
+      "pname": "pnpm",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "10.6.3",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/l0y8lg6hf8d3dcqlblf6azg3pgrmxk3h-pnpm-10.6.3"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pnpm",
+      "broken": false,
+      "derivation": "/nix/store/90yhrdz8yy11r326n29bzzr2qpzcbaac-pnpm-10.6.3.drv",
+      "description": "Fast, disk space efficient package manager for JavaScript",
+      "install_id": "pnpm",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "pnpm-10.6.3",
+      "pname": "pnpm",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "10.6.3",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/hz3gb73iijipqvf8ghid066pdhg1gbx5-pnpm-10.6.3"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pnpm",
+      "broken": false,
+      "derivation": "/nix/store/2igrmx6bx6yqhnnvyrh547i3xlsshfdl-pnpm-10.6.3.drv",
+      "description": "Fast, disk space efficient package manager for JavaScript",
+      "install_id": "pnpm",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "pnpm-10.6.3",
+      "pname": "pnpm",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "10.6.3",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/73n49s5icjskippv48pn4swgr1qsxllv-pnpm-10.6.3"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pnpm",
+      "broken": false,
+      "derivation": "/nix/store/l3c9my6q27k8169jlax7cw44yr97j97b-pnpm-10.6.3.drv",
+      "description": "Fast, disk space efficient package manager for JavaScript",
+      "install_id": "pnpm",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "pnpm-10.6.3",
+      "pname": "pnpm",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "10.6.3",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/nrx9a9adgnhspm5lqgcyl9vycsyqwfyh-pnpm-10.6.3"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "postgresql",
+      "broken": false,
+      "derivation": "/nix/store/mj65i4hapnrjmyvv546c09zgf8xf0jra-postgresql-17.4.drv",
+      "description": "Powerful, open source object-relational database system",
+      "install_id": "postgresql",
+      "license": "PostgreSQL",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "postgresql-17.4",
+      "pname": "postgresql",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "17.4",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "dev": "/nix/store/f07mk2fiyb1mawcbwacllfca60c3qz17-postgresql-17.4-dev",
+        "doc": "/nix/store/w2d65iq22l5nfmxl33v401s40f9sk0r9-postgresql-17.4-doc",
+        "lib": "/nix/store/x2252h5f8bq8vggqnki4nz9mf3drlffm-postgresql-17.4-lib",
+        "man": "/nix/store/892x7nrcydcax8z88d337436di2kp50j-postgresql-17.4-man",
+        "out": "/nix/store/pw8nqywmv0rx01sic5p89d8sg2ym1cq3-postgresql-17.4"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "postgresql",
+      "broken": false,
+      "derivation": "/nix/store/24mj715jm8d2369mabghlqaxwjf2vg0w-postgresql-17.4.drv",
+      "description": "Powerful, open source object-relational database system",
+      "install_id": "postgresql",
+      "license": "PostgreSQL",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "postgresql-17.4",
+      "pname": "postgresql",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "17.4",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/xf3ldavlfw85mzgx8cj4jh5hwh9ggf0q-postgresql-17.4-debug",
+        "dev": "/nix/store/0a6mqx00fncp6gvwbmm01ziazpdaakic-postgresql-17.4-dev",
+        "doc": "/nix/store/1w2hxbpka86hi9xs8vydxqbfcs1a0qgh-postgresql-17.4-doc",
+        "lib": "/nix/store/jc7jv38lhza1v4p22l8b7nr1yp69c5sm-postgresql-17.4-lib",
+        "man": "/nix/store/hg3iabq2fjr96bdavzmqfvnya2imw03k-postgresql-17.4-man",
+        "out": "/nix/store/3qyphghvw55njd2048kdagd2i3ck2lwr-postgresql-17.4"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "postgresql",
+      "broken": false,
+      "derivation": "/nix/store/dh1lwl7nnriihrmqxrg1d77vhxmzd381-postgresql-17.4.drv",
+      "description": "Powerful, open source object-relational database system",
+      "install_id": "postgresql",
+      "license": "PostgreSQL",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "postgresql-17.4",
+      "pname": "postgresql",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "17.4",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "dev": "/nix/store/rigq2bcccsf57a69vw0zqv3czqvak9p6-postgresql-17.4-dev",
+        "doc": "/nix/store/02znrncmdg9l1xdj90m9dl619a1y831a-postgresql-17.4-doc",
+        "lib": "/nix/store/rkcbd2sb8gaiawx40ydq8xcsp72ff6gj-postgresql-17.4-lib",
+        "man": "/nix/store/7pqsn9z79k7fbilwp0aqadj8ncbga4pv-postgresql-17.4-man",
+        "out": "/nix/store/d43lyc6xqwk4k39yzlxb037kchi33fqj-postgresql-17.4"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "postgresql",
+      "broken": false,
+      "derivation": "/nix/store/fcix1wxcckvrhg04yh2z1788294hc07l-postgresql-17.4.drv",
+      "description": "Powerful, open source object-relational database system",
+      "install_id": "postgresql",
+      "license": "PostgreSQL",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "name": "postgresql-17.4",
+      "pname": "postgresql",
+      "rev": "c80f6a7e10b39afcc1894e02ef785b1ad0b0d7e5",
+      "rev_count": 768633,
+      "rev_date": "2025-03-15T20:13:08Z",
+      "scrape_date": "2025-03-17T00:32:15Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "17.4",
+      "outputs_to_install": [
+        "man",
+        "out"
+      ],
+      "outputs": {
+        "debug": "/nix/store/ap031b5f59xzgdp1hckbvj6qn00b55rl-postgresql-17.4-debug",
+        "dev": "/nix/store/2gfhs8b7hq69mn5df6afns8jjqaavw0f-postgresql-17.4-dev",
+        "doc": "/nix/store/wi5g5zylciygcwnvgv9697gwwjd6r1ma-postgresql-17.4-doc",
+        "lib": "/nix/store/4mfi1s3cmbwm4059d5qg689m4pj57m4p-postgresql-17.4-lib",
+        "man": "/nix/store/nq3377crls255rli4qydmcx01fhchdrm-postgresql-17.4-man",
+        "out": "/nix/store/fi1qz98nl8q7ddwbbms5xssywn44ackc-postgresql-17.4"
       },
       "system": "x86_64-linux",
       "group": "toplevel",

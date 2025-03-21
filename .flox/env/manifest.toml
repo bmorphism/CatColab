@@ -19,6 +19,11 @@ nodejs = { pkg-path = "nodejs" }
 cargo.pkg-path = "cargo"
 wasm-pack.pkg-path = "wasm-pack"
 just.pkg-path = "just"
+act.pkg-path = "act"
+pnpm.pkg-path = "pnpm"
+babashka.pkg-path = "babashka"
+postgresql.pkg-path = "postgresql"
+netcat.pkg-path = "netcat"
 
 
 ## Environment Variables ---------------------------------------------
