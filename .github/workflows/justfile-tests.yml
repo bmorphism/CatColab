@@ -1,0 +1,135 @@
+name: Justfile Pathway Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  # Test the regular system-installed pathway (no Flox)
+  test-system-tools:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: catcolab
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up cargo
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install just
+        run: cargo install just
+
+      - name: Setup with System Tools
+        run: |
+          # Set the correct DB URL for CI environment
+          echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/catcolab" > .env
+          echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/catcolab" > packages/backend/.env
+          just setup
+        
+      - name: Test Database Setup
+        run: just db-setup
+
+      - name: Verify Backend Starts
+        run: |
+          cd packages/backend && timeout 5s cargo run || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+
+      - name: Verify Frontend Build
+        run: cd packages/frontend && pnpm build
+
+  # Test the Flox environment pathway
+  test-flox-pathway:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: catcolab
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Flox
+        run: |
+          curl -sS https://get.flox.dev/install | bash
+          echo "$HOME/.flox/bin" >> $GITHUB_PATH
+
+      - name: Setup Flox Environment
+        run: |
+          flox init
+          flox install just pnpm node wasm-pack
+          echo "FLOX_ENV=local/catcolab-test" >> $GITHUB_ENV
+
+      - name: Setup CatColab with Flox
+        run: |
+          # Set the correct DB URL for CI environment
+          echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/catcolab" > .env
+          echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/catcolab" > packages/backend/.env
+          just setup
+
+      - name: Test Database Setup with Flox
+        run: just db-setup
+
+      - name: Verify Backend Starts with Flox
+        run: |
+          cd packages/backend && timeout 5s cargo run || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+
+      - name: Verify Frontend Build with Flox
+        run: cd packages/frontend && pnpm build
+
+  # Test the staging mode (no DB required)
+  test-staging-mode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up cargo
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install just
+        run: cargo install just
+
+      - name: Setup CatColab
+        run: just setup
+
+      - name: Test Staging Build
+        run: |
+          cd packages/frontend && pnpm build --mode staging
