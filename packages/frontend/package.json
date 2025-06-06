@@ -5,8 +5,9 @@
     "version": "0.1.0",
     "type": "module",
     "scripts": {
+        "staging": "vite --mode staging",
         "dev": "vite --host",
-        "build": "wasm-pack build ../catlog-wasm && tsc -b && vite build",
+        "build": "wasm-pack build ../catlog-wasm && tsc -b && vite build --sourcemap true",
         "compile": "tcm -p 'src/**/*.module.css' . && tsc -b",
         "preview": "vite preview",
         "format": "biome format --write",
@@ -41,6 +42,7 @@
         "@viz-js/viz": "^3.7.0",
         "catcolab-api": "link:../backend/pkg",
         "catlog-wasm": "link:../catlog-wasm/pkg",
+        "notebook-types": "link:../notebook-types/pkg",
         "echarts": "^5.5.1",
         "echarts-solid": "^0.2.0",
         "firebase": "^10.14.0",
@@ -69,8 +71,7 @@
         "typescript": "^5.2.2",
         "vite": "^5.3.1",
         "vite-plugin-solid": "^2.10.2",
-        "vite-plugin-top-level-await": "^1.4.1",
-        "vite-plugin-wasm": "^3.3.0",
+        "vite-plugin-wasm": "^3.4.1",
         "vitest": "^3.0.2",
         "wasm-pack": "^0.13.1"
     }

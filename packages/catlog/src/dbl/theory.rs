@@ -48,7 +48,7 @@ by the table:
 | Method                                      | Double theory          | Double category        |
 |---------------------------------------------|------------------------|------------------------|
 | [`hom_type`](DblTheory::hom_type)           | Hom type               | Identity proarrow      |
-| `hom_op`                                    | Hom operation          | Identity cell on arrow |
+| [`hom_op`](DblTheory::hom_op)               | Hom operation          | Identity cell on arrow |
 | [`compose_types`](DblTheory::compose_types) | Compose morphism types | Compose proarrows      |
 
 Finally, operations on both objects and morphisms have identities and can be
@@ -69,16 +69,18 @@ composed:
 */
 
 use std::hash::{BuildHasher, BuildHasherDefault, Hash, RandomState};
+use std::ops::Range;
 
 use derivative::Derivative;
 use derive_more::From;
 use ref_cast::RefCast;
 use ustr::{IdentityHasher, Ustr};
 
+use super::category::*;
 use super::graph::ProedgeGraph;
-use super::{category::*, tree::DblTree};
-use crate::one::{Graph, path::Path};
-use crate::one::{category::*, fin_category::UstrFinCategory};
+use super::tree::{DblNode, DblTree};
+use crate::one::{Graph, path::Path, tree::OpenTree};
+use crate::one::{category::*, fp_category::UstrFpCategory};
 use crate::validate::Validate;
 use crate::zero::*;
 
@@ -180,15 +182,12 @@ pub trait DblTheory {
         self.compose_ob_ops(Path::Id(x))
     }
 
-    /* Hom morphism operation on an object operation.
+    /** Hom morphism operation on an object operation.
 
     Viewing the double theory as a virtual double category, this is the unit
     cell on an arrow.
-
-    TODO: Implementing this requires the VDCs have an interface for the
-    universal property of a unit.
-    */
-    //fn hom_op(&self, f: Self::ObOp) -> Self::MorOp;
+     */
+    fn hom_op(&self, f: Self::ObOp) -> Self::MorOp;
 
     /// Compose operations on morphisms.
     fn compose_mor_ops(&self, tree: DblTree<Self::ObOp, Self::MorType, Self::MorOp>)
@@ -204,7 +203,7 @@ pub trait DblTheory {
     }
 }
 
-impl<VDC: VDblCategory> DblTheory for VDC {
+impl<VDC: VDCWithComposites> DblTheory for VDC {
     type ObType = VDC::Ob;
     type MorType = VDC::Pro;
     type ObOp = VDC::Arr;
@@ -255,6 +254,14 @@ impl<VDC: VDblCategory> DblTheory for VDC {
     fn hom_type(&self, x: Self::ObType) -> Self::MorType {
         self.unit(x).expect("A double theory should have all hom types")
     }
+    fn hom_op(&self, f: Self::ObOp) -> Self::MorOp {
+        let y = self.cod(&f);
+        let y_ext = self.unit_ext(y).expect("Codomain of arrow should have hom type");
+        let cell = self.compose_cells(DblTree(
+            OpenTree::linear(vec![DblNode::Spine(f), DblNode::Cell(y_ext)]).unwrap(),
+        ));
+        self.through_unit(cell, 0).expect("Domain of arrow should have hom type")
+    }
 
     fn compose_ob_ops(&self, path: Path<Self::ObType, Self::ObOp>) -> Self::ObOp {
         self.compose(path)
@@ -288,7 +295,14 @@ indeed **discrete**, which can equivalently be defined as
 pub struct DiscreteDblTheory<Cat: FgCategory>(Cat);
 
 /// A discrete double theory with keys of type `Ustr`.
-pub type UstrDiscreteDblTheory = DiscreteDblTheory<UstrFinCategory>;
+pub type UstrDiscreteDblTheory = DiscreteDblTheory<UstrFpCategory>;
+
+impl<Cat: FgCategory> DiscreteDblTheory<Cat> {
+    /// Gets a reference to the underlying category of object/morphism types.
+    pub fn category(&self) -> &Cat {
+        &self.0
+    }
+}
 
 impl<C: FgCategory> VDblCategory for DiscreteDblTheory<C>
 where
@@ -344,15 +358,28 @@ where
         disc.compose(path)
     }
 
+    fn compose_cells(&self, tree: DblTree<Self::Arr, Self::Pro, Self::Cell>) -> Self::Cell {
+        tree.dom(UnderlyingDblGraph::ref_cast(self))
+    }
+}
+
+impl<C: FgCategory> VDCWithComposites for DiscreteDblTheory<C>
+where
+    C::Ob: Clone,
+    C::Mor: Clone,
+{
     fn composite(&self, path: Path<Self::Ob, Self::Pro>) -> Option<Self::Pro> {
         Some(self.0.compose(path))
     }
+
+    /// In a discrete double theory, every cell is an extension.
     fn composite_ext(&self, path: Path<Self::Ob, Self::Pro>) -> Option<Self::Cell> {
         Some(path)
     }
 
-    fn compose_cells(&self, tree: DblTree<Self::Arr, Self::Pro, Self::Cell>) -> Self::Cell {
-        tree.dom(UnderlyingDblGraph::ref_cast(self))
+    fn through_composite(&self, path: Self::Cell, range: Range<usize>) -> Option<Self::Cell> {
+        let graph = UnderlyingGraph::ref_cast(&self.0);
+        Some(path.replace_subpath(graph, range, |subpath| self.0.compose(subpath).into()))
     }
 }
 
@@ -633,30 +660,6 @@ where
         path.flatten()
     }
 
-    fn composite2(&self, m: Self::Pro, n: Self::Pro) -> Option<Self::Pro> {
-        let mn = match (m, n) {
-            (m, TabMorType::Hom(y)) if self.tgt(&m) == *y => m,
-            (TabMorType::Hom(x), n) if self.src(&n) == *x => n,
-            (TabMorType::Basic(d), TabMorType::Basic(e)) => {
-                self.compose_map.apply(&(d, e)).expect("Composition should be defined")
-            }
-            _ => panic!("Ill-typed composite of morphism types in discrete tabulator theory"),
-        };
-        Some(mn)
-    }
-    fn unit(&self, x: Self::Ob) -> Option<Self::Pro> {
-        Some(TabMorType::Hom(Box::new(x)))
-    }
-    fn composite(&self, path: Path<Self::Ob, Self::Pro>) -> Option<Self::Pro> {
-        Some(path.reduce(|x| self.unit(x).unwrap(), |m, n| self.composite2(m, n).unwrap()))
-    }
-    fn composite_ext(&self, path: Path<Self::Ob, Self::Pro>) -> Option<Self::Cell> {
-        Some(TabMorOp {
-            dom: path,
-            projections: vec![],
-        })
-    }
-
     fn compose_cells(&self, tree: DblTree<Self::Arr, Self::Pro, Self::Cell>) -> Self::Cell {
         let graph = UnderlyingDblGraph::ref_cast(self);
         let dom = tree.dom(graph);
@@ -675,25 +678,68 @@ where
     }
 }
 
+impl<V, E, S> VDCWithComposites for DiscreteTabTheory<V, E, S>
+where
+    V: Eq + Clone + Hash,
+    E: Eq + Clone + Hash,
+    S: BuildHasher,
+{
+    fn composite2(&self, m: Self::Pro, n: Self::Pro) -> Option<Self::Pro> {
+        let mn = match (m, n) {
+            (m, TabMorType::Hom(y)) if self.tgt(&m) == *y => m,
+            (TabMorType::Hom(x), n) if self.src(&n) == *x => n,
+            (TabMorType::Basic(d), TabMorType::Basic(e)) => {
+                self.compose_map.apply(&(d, e)).expect("Composition should be defined")
+            }
+            _ => panic!("Ill-typed composite of morphism types in discrete tabulator theory"),
+        };
+        Some(mn)
+    }
+    fn unit(&self, x: Self::Ob) -> Option<Self::Pro> {
+        Some(TabMorType::Hom(Box::new(x)))
+    }
+    fn composite(&self, path: Path<Self::Ob, Self::Pro>) -> Option<Self::Pro> {
+        Some(path.reduce(|x| self.unit(x).unwrap(), |m, n| self.composite2(m, n).unwrap()))
+    }
+
+    fn composite_ext(&self, path: Path<Self::Ob, Self::Pro>) -> Option<Self::Cell> {
+        Some(TabMorOp {
+            dom: path,
+            projections: vec![],
+        })
+    }
+
+    fn through_composite(&self, cell: Self::Cell, range: Range<usize>) -> Option<Self::Cell> {
+        let graph = ProedgeGraph::ref_cast(UnderlyingDblGraph::ref_cast(self));
+        let TabMorOp { dom, projections } = cell;
+        Some(TabMorOp {
+            dom: dom.replace_subpath(graph, range, |sub| self.composite(sub).unwrap().into()),
+            projections,
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::one::fin_category::*;
+    use crate::one::{Path, fp_category::FpCategory};
 
     #[test]
     fn discrete_double_theory() {
-        type Mor<V, E> = FinMor<V, E>;
-
-        let mut sgn: FinCategory<char, char> = Default::default();
+        let mut sgn: FpCategory<char, char> = Default::default();
         sgn.add_ob_generator('*');
         sgn.add_mor_generator('n', '*', '*');
-        sgn.set_composite('n', 'n', Mor::Id('*'));
+        sgn.equate(Path::pair('n', 'n'), Path::Id('*'));
 
         let th = DiscreteDblTheory::from(sgn);
+        let sgn = th.category();
         assert!(th.has_ob_type(&'*'));
-        assert!(th.has_mor_type(&Mor::Generator('n')));
-        let path = Path::pair(Mor::Generator('n'), Mor::Generator('n'));
-        assert_eq!(th.compose_types(path), Some(Mor::Id('*')));
+        assert!(th.has_mor_type(&'n'.into()));
+        let path = Path::pair('n'.into(), 'n'.into());
+        assert!(sgn.morphisms_are_equal(th.compose_types(path).unwrap(), Path::Id('*')));
+
+        assert_eq!(th.hom_type('*'), Path::Id('*'));
+        assert_eq!(th.hom_op('*'), Path::single(Path::Id('*')));
     }
 
     #[test]

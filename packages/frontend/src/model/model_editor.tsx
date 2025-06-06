@@ -2,6 +2,7 @@ import { useParams } from "@solidjs/router";
 import { Match, Show, Switch, createResource, useContext } from "solid-js";
 import invariant from "tiny-invariant";
 
+import type { ModelJudgment } from "catlog-wasm";
 import { useApi } from "../api";
 import { InlineInput } from "../components";
 import {
@@ -11,17 +12,22 @@ import {
     cellShortcutModifier,
     newFormalCell,
 } from "../notebook";
-import { DocumentMenu, TheoryHelpButton, Toolbar } from "../page";
+import {
+    DocumentBreadcrumbs,
+    DocumentLoadingScreen,
+    DocumentMenu,
+    TheoryHelpButton,
+    Toolbar,
+} from "../page";
 import { TheoryLibraryContext } from "../stdlib";
 import type { ModelTypeMeta } from "../theory";
-import { MaybePermissionsButton } from "../user";
+import { PermissionsButton } from "../user";
 import { LiveModelContext } from "./context";
 import { type LiveModelDocument, getLiveModel } from "./document";
 import { MorphismCellEditor } from "./morphism_cell_editor";
 import { ObjectCellEditor } from "./object_cell_editor";
 import { TheorySelectorDialog } from "./theory_selector";
 import {
-    type ModelJudgment,
     type MorphismDecl,
     type ObjectDecl,
     duplicateModelJudgment,
@@ -43,26 +49,29 @@ export default function ModelPage() {
         (refId) => getLiveModel(refId, api, theories),
     );
 
-    return <ModelDocumentEditor liveModel={liveModel()} />;
+    return (
+        <Show when={liveModel()} fallback={<DocumentLoadingScreen />}>
+            {(loadedModel) => <ModelDocumentEditor liveModel={loadedModel()} />}
+        </Show>
+    );
 }
 
 export function ModelDocumentEditor(props: {
-    liveModel?: LiveModelDocument;
+    liveModel: LiveModelDocument;
 }) {
     return (
         <div class="growable-container">
             <Toolbar>
                 <DocumentMenu liveDocument={props.liveModel} />
+                <DocumentBreadcrumbs document={props.liveModel} />
                 <span class="filler" />
-                <TheoryHelpButton theory={props.liveModel?.theory()} />
-                <MaybePermissionsButton
-                    permissions={props.liveModel?.liveDoc.permissions}
-                    refId={props.liveModel?.refId}
+                <TheoryHelpButton theory={props.liveModel.theory()} />
+                <PermissionsButton
+                    permissions={props.liveModel.liveDoc.permissions}
+                    refId={props.liveModel.refId}
                 />
             </Toolbar>
-            <Show when={props.liveModel}>
-                {(liveModel) => <ModelPane liveModel={liveModel()} />}
-            </Show>
+            <ModelPane liveModel={props.liveModel} />
         </div>
     );
 }
