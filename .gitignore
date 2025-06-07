@@ -94,5 +94,10 @@ instrument.mjs
 # nix build output
 /infrastructure/result
 
+# Local upstream tools
+/.topos/*
+!.topos/README.md
+!.topos/update-from-upstream.sh
+
 # Database dumps
 /dumps

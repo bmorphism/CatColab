@@ -88,6 +88,17 @@ cargo clippy
 Try to remember to run these commands before making a PR. (If you forget, the CI
 will remind you.)
 
+### Keeping in sync with upstream
+
+This fork tracks the public repository
+[ToposInstitute/CatColab](https://github.com/ToposInstitute/CatColab).
+Helper scripts and notes for merging updates are stored in the
+[`\.topos`](./.topos) directory. To pull the latest upstream changes run:
+
+```bash
+./.topos/update-from-upstream.sh
+```
+
 ## For mathematicians
 
 As the name suggests, CatColab is based on mathematical ideas from category
