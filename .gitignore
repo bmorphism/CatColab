@@ -95,9 +95,11 @@ instrument.mjs
 /infrastructure/result
 
 # Local upstream tools
-/.topos/*
-!.topos/README.md
-!.topos/update-from-upstream.sh
+# Uncomment the following lines when self-hosting to avoid committing
+# local state from the `.topos` workspace
+# /.topos/*
+# !.topos/README.md
+# !.topos/update-from-upstream.sh
 
 # Database dumps
 /dumps
