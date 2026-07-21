@@ -36,6 +36,27 @@ pub fn delayed_negative_loop(th: Rc<DiscreteDblTheory>) -> DiscreteDblModel {
     loop_of_type(th, name("Object"), Path::pair(name("Negative"), name("Slow")))
 }
 
+/// The Dutch-book loop: a sign-inconsistent cycle of claims.
+///
+/// A free model of the [prediction market
+/// theory](super::theories::th_prediction_market). As a motif, occurrences of
+/// this loop in a market model are cycles of conditional exposures with net
+/// negative sign: exactly the cycles that admit a Dutch book, i.e. nontrivial
+/// classes in the first sign cohomology of the market graph.
+pub fn dutch_book_loop(th: Rc<DiscreteDblTheory>) -> DiscreteDblModel {
+    loop_of_type(th, name("Claim"), name("Negative").into())
+}
+
+/// The coherent (positive) claim loop in a prediction market.
+///
+/// A free model of the [prediction market
+/// theory](super::theories::th_prediction_market): a cycle of conditional
+/// exposures with net positive sign, which constrains prices without
+/// contradiction.
+pub fn coherent_claim_loop(th: Rc<DiscreteDblTheory>) -> DiscreteDblModel {
+    loop_of_type(th, name("Claim"), Path::Id(name("Claim")))
+}
+
 /// Creates a self-loop with given object and morphism types.
 fn loop_of_type(
     th: Rc<DiscreteDblTheory>,

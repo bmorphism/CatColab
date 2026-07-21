@@ -181,6 +181,51 @@ impl ThSignedCategory {
     }
 }
 
+/// The theory of prediction markets.
+#[wasm_bindgen]
+pub struct ThPredictionMarket(Rc<theory::DiscreteDblTheory>);
+
+#[wasm_bindgen]
+impl ThPredictionMarket {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Self {
+        Self(Rc::new(theories::th_prediction_market()))
+    }
+
+    #[wasm_bindgen]
+    pub fn theory(&self) -> DblTheory {
+        DblTheory(self.0.clone().into())
+    }
+
+    /// Find Dutch-book cycles in a market: sign-inconsistent loops of claims.
+    #[wasm_bindgen(js_name = "dutchBooks")]
+    pub fn dutch_books(
+        &self,
+        model: &DblModel,
+        options: MotifsOptions,
+    ) -> Result<Vec<MotifOccurrence>, String> {
+        let dutch_book = models::dutch_book_loop(self.0.clone());
+        motifs(&dutch_book, model, options)
+    }
+
+    /// Find coherent (positive) claim cycles in a market.
+    #[wasm_bindgen(js_name = "coherentLoops")]
+    pub fn coherent_loops(
+        &self,
+        model: &DblModel,
+        options: MotifsOptions,
+    ) -> Result<Vec<MotifOccurrence>, String> {
+        let coherent = models::coherent_claim_loop(self.0.clone());
+        motifs(&coherent, model, options)
+    }
+}
+
+impl Default for ThPredictionMarket {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// The theory of delayable signed categories.
 #[wasm_bindgen]
 pub struct ThDelayableSignedCategory(Rc<theory::DiscreteDblTheory>);

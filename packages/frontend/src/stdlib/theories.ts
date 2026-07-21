@@ -88,6 +88,17 @@ stdTheories.add(
 
 stdTheories.add(
     {
+        id: "prediction-market",
+        name: "Prediction market",
+        description: "Claims, signed exposures, and settled outcomes",
+        iconLetters: ["P", "m"],
+        group: "Economics",
+    },
+    async () => (await import("./theories/prediction-market")).default,
+);
+
+stdTheories.add(
+    {
         id: "causal-loop-delays",
         name: "Causal loop diagram with delays",
         description: "Causal relationships: positive or negative, fast or slow",

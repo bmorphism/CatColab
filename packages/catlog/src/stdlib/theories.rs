@@ -87,6 +87,32 @@ pub fn th_nullable_signed_category() -> DiscreteDblTheory {
     sgn.into()
 }
 
+/// The theory of prediction markets.
+///
+/// A *prediction market* is modeled as a signed category (as in
+/// [`th_signed_category`]) equipped with a settlement pole: a second object type
+/// `Outcome` receiving resolution morphisms from claims. Models are market
+/// graphs: objects over `Claim` are open claims, objects over `Outcome` are
+/// settled boundary events, edges over the identity (resp. `Negative`) are
+/// positive (resp. negative) conditional exposures, and edges over `Settles`
+/// (resp. `SettlesAgainst`) resolve a claim for (resp. against) an outcome.
+///
+/// Valuation is *not* part of the theory: coherent prices are the harmonic
+/// (martingale) labelings of a model that extend the settled boundary, computed
+/// by an analysis. A Dutch book is a sign-inconsistent cycle, i.e. a nontrivial
+/// class in the first cohomology of the model with sign coefficients.
+pub fn th_prediction_market() -> DiscreteDblTheory {
+    let mut mkt = FpCategory::new();
+    mkt.add_ob_generator(name("Claim"));
+    mkt.add_ob_generator(name("Outcome"));
+    mkt.add_mor_generator(name("Negative"), name("Claim"), name("Claim"));
+    mkt.add_mor_generator(name("Settles"), name("Claim"), name("Outcome"));
+    mkt.add_mor_generator(name("SettlesAgainst"), name("Claim"), name("Outcome"));
+    mkt.equate(Path::pair(name("Negative"), name("Negative")), Path::empty(name("Claim")));
+    mkt.equate(Path::pair(name("Negative"), name("Settles")), name("SettlesAgainst").into());
+    mkt.into()
+}
+
 /// The theory of categories with scalars.
 ///
 /// A *category with scalars* is a category sliced over the monoid representing a walking
@@ -361,6 +387,7 @@ mod tests {
         assert!(th_signed_category().validate().is_ok());
         assert!(th_delayable_signed_category().validate().is_ok());
         assert!(th_nullable_signed_category().validate().is_ok());
+        assert!(th_prediction_market().validate().is_ok());
         assert!(th_category_with_scalars().validate().is_ok());
         assert!(th_power_system().validate().is_ok());
     }
@@ -379,6 +406,21 @@ mod tests {
         assert!(th_sym_multicategory().validate().is_ok());
         assert!(modal_th_power_system().validate().is_ok());
         assert!(th_polynomial_ode_system().validate().is_ok());
+    }
+
+    #[test]
+    fn prediction_markets() {
+        // Check the sign algebra over the settlement pole. In particular,
+        // `Negative ; SettlesAgainst = Settles` must be *derivable* from the
+        // two generating equations, witnessing that the presentation is minimal.
+        let th = th_prediction_market();
+        assert!(th.has_mor_type(&name("Negative").into()));
+        assert!(th.has_mor_type(&name("Settles").into()));
+        assert!(th.has_mor_type(&name("SettlesAgainst").into()));
+        let double_neg = Path::Seq(nonempty![name("Negative"), name("Negative")]);
+        assert!(th.0.morphisms_are_equal(double_neg, Path::empty(name("Claim"))));
+        let neg_against = Path::Seq(nonempty![name("Negative"), name("SettlesAgainst")]);
+        assert!(th.0.morphisms_are_equal(neg_against, name("Settles").into()));
     }
 
     #[test]
