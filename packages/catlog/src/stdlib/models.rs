@@ -263,6 +263,76 @@ mod tests {
     use crate::validate::Validate;
 
     #[test]
+    fn prediction_market_complex() {
+        // A market complex observed live on Manifold (July 2026): the
+        // "AutopoieticErgodicity" family of markets about one person. Manifold
+        // stores these as *isolated* CPMM pools; every edge below is a modeling
+        // commitment imposed on top, and the point of the test is that the
+        // motif machinery audits those commitments.
+        //
+        // Claims (Manifold market ids):
+        //   mating_attempt      i0k3il02tf  p=0.248
+        //   duck_relationship   y64l9f6vmo  p=0.576
+        //   roasted_duck        xmcklqvl8z  p=0.532
+        //   penguin_relationship 3h8hsw6g93 p=0.250
+        //   duck_tales          s5sl5n69gO  p=0.500
+        //   obese_2030          lupOPAS02d  p=0.505 (deliberately isolated:
+        //     no defensible coupling — sparsity is data, not failure)
+        use crate::dbl::model_morphism::DiscreteDblModelMapping;
+
+        let th = Rc::new(th_prediction_market());
+        let mut market = DiscreteDblModel::new(th.clone());
+        for claim in ["mating_attempt", "duck_relationship", "roasted_duck",
+                      "penguin_relationship", "duck_tales", "obese_2030"] {
+            market.add_ob(name(claim), name("Claim"));
+        }
+        market.add_ob(name("duck_tales_airs"), name("Outcome"));
+
+        let pos = Path::Id(name("Claim"));
+        let neg: QualifiedPath = name("Negative").into();
+        // Commitments:
+        market.add_mor(name("courtship"), name("mating_attempt"),
+            name("duck_relationship"), pos.clone()); // courtship raises relationship
+        market.add_mor(name("devotion"), name("duck_relationship"),
+            name("roasted_duck"), neg.clone()); // partner-species taboo
+        market.add_mor(name("taboo"), name("roasted_duck"),
+            name("duck_relationship"), neg.clone()); // reciprocal foreclosure
+        market.add_mor(name("affinity"), name("duck_relationship"),
+            name("penguin_relationship"), pos.clone()); // bird-affinity generalizes
+        market.add_mor(name("rivalry"), name("penguin_relationship"),
+            name("duck_relationship"), neg.clone()); // exclusive affection
+        market.add_mor(name("fodder"), name("duck_relationship"),
+            name("duck_tales"), pos.clone()); // narrative fodder
+        market.add_mor(name("airs"), name("duck_tales"),
+            name("duck_tales_airs"), name("Settles").into());
+        assert!(market.validate().is_ok());
+
+        // Dutch-book audit: `affinity` and `rivalry` are *jointly* incoherent
+        // (net negative cycle), even though each is individually defensible.
+        // The motif finder must catch our own contradictory commitments.
+        let dutch = dutch_book_loop(th.clone());
+        let found = DiscreteDblModelMapping::morphisms(&dutch, &market).monic().find_all();
+        assert!(!found.is_empty(), "affinity+rivalry should form a Dutch book");
+
+        // The devotion/taboo 2-cycle is net positive: coherent, not a book.
+        let coherent = coherent_claim_loop(th.clone());
+        let found = DiscreteDblModelMapping::morphisms(&coherent, &market).monic().find_all();
+        assert!(!found.is_empty(), "devotion+taboo should form a coherent loop");
+
+        // Falsifiability: the counterfactual world without `affinity` must
+        // have no Dutch book. (No retraction API: counterfactual worlds are
+        // constructed, not mutated.)
+        let mut repaired = DiscreteDblModel::new(th.clone());
+        repaired.add_ob(name("duck_relationship"), name("Claim"));
+        repaired.add_ob(name("penguin_relationship"), name("Claim"));
+        repaired.add_mor(name("rivalry"), name("penguin_relationship"),
+            name("duck_relationship"), neg.clone());
+        assert!(repaired.validate().is_ok());
+        let found = DiscreteDblModelMapping::morphisms(&dutch, &repaired).monic().find_all();
+        assert!(found.is_empty(), "without affinity there is no book");
+    }
+
+    #[test]
     fn signed_categories() {
         let th = Rc::new(th_signed_category());
         assert!(positive_loop(th.clone()).validate().is_ok());
