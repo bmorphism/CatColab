@@ -333,6 +333,35 @@ mod tests {
     }
 
     #[test]
+    fn resolved_market_poles() {
+        // Real settlements observed on Manifold (July 2026), exercising both
+        // resolution morphisms with live data:
+        //   u9n9LPUcqU "Will the sun rise tomorrow?" resolved YES at p=0.99
+        //     (creator @bmorphism; Laplace's example, played straight)
+        //   gqeymkhcmj "Will @bmorphism lose The Pentagon by end of 2024"
+        //     resolved YES with ZERO bets ever placed: settlement without
+        //     trading. The pole fires by creator fiat, independent of any
+        //     market dynamics — which is why `Settles` is structure, not
+        //     valuation.
+        //   gysm9cbgov "...escape a manifold market addiction?" resolved NO
+        //     at p=0.18: a reflexive claim (about the subject's relation to
+        //     the market system containing it), settled against.
+        let th = Rc::new(th_prediction_market());
+        let mut market = DiscreteDblModel::new(th);
+        market.add_ob(name("sun_rise"), name("Claim"));
+        market.add_ob(name("pentagon_lost"), name("Claim"));
+        market.add_ob(name("addiction_escape"), name("Claim"));
+        market.add_ob(name("audit_2024"), name("Outcome"));
+        market.add_mor(name("sun_yes"), name("sun_rise"),
+            name("audit_2024"), name("Settles").into());
+        market.add_mor(name("pentagon_yes"), name("pentagon_lost"),
+            name("audit_2024"), name("Settles").into());
+        market.add_mor(name("escape_no"), name("addiction_escape"),
+            name("audit_2024"), name("SettlesAgainst").into());
+        assert!(market.validate().is_ok());
+    }
+
+    #[test]
     fn signed_categories() {
         let th = Rc::new(th_signed_category());
         assert!(positive_loop(th.clone()).validate().is_ok());
