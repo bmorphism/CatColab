@@ -113,6 +113,34 @@ pub fn th_prediction_market() -> DiscreteDblTheory {
     mkt.into()
 }
 
+/// The theory of nullable prediction markets.
+///
+/// Extends [`th_prediction_market`] the way [`th_nullable_signed_category`]
+/// extends [`th_signed_category`]: claims may carry a `Zero` (annulled)
+/// exposure, and settlement gains a third verdict `Annuls`, the resolution
+/// "N/A" of Metaculus and Manifold's `CANCEL`. Sign structure dies on
+/// annulment: `Negative` acts trivially on `Annuls`, and any exposure path
+/// through `Zero` settles as `Annuls`.
+pub fn th_nullable_prediction_market() -> DiscreteDblTheory {
+    let mut mkt = FpCategory::new();
+    mkt.add_ob_generator(name("Claim"));
+    mkt.add_ob_generator(name("Outcome"));
+    mkt.add_mor_generator(name("Negative"), name("Claim"), name("Claim"));
+    mkt.add_mor_generator(name("Zero"), name("Claim"), name("Claim"));
+    mkt.add_mor_generator(name("Settles"), name("Claim"), name("Outcome"));
+    mkt.add_mor_generator(name("SettlesAgainst"), name("Claim"), name("Outcome"));
+    mkt.add_mor_generator(name("Annuls"), name("Claim"), name("Outcome"));
+    mkt.equate(Path::pair(name("Negative"), name("Negative")), Path::empty(name("Claim")));
+    mkt.equate(Path::pair(name("Negative"), name("Zero")), name("Zero").into());
+    mkt.equate(Path::pair(name("Zero"), name("Negative")), name("Zero").into());
+    mkt.equate(Path::pair(name("Zero"), name("Zero")), name("Zero").into());
+    mkt.equate(Path::pair(name("Negative"), name("Settles")), name("SettlesAgainst").into());
+    mkt.equate(Path::pair(name("Zero"), name("Settles")), name("Annuls").into());
+    mkt.equate(Path::pair(name("Negative"), name("Annuls")), name("Annuls").into());
+    mkt.equate(Path::pair(name("Zero"), name("Annuls")), name("Annuls").into());
+    mkt.into()
+}
+
 /// The theory of categories with scalars.
 ///
 /// A *category with scalars* is a category sliced over the monoid representing a walking
@@ -388,6 +416,7 @@ mod tests {
         assert!(th_delayable_signed_category().validate().is_ok());
         assert!(th_nullable_signed_category().validate().is_ok());
         assert!(th_prediction_market().validate().is_ok());
+        assert!(th_nullable_prediction_market().validate().is_ok());
         assert!(th_category_with_scalars().validate().is_ok());
         assert!(th_power_system().validate().is_ok());
     }
@@ -421,6 +450,24 @@ mod tests {
         assert!(th.0.morphisms_are_equal(double_neg, Path::empty(name("Claim"))));
         let neg_against = Path::Seq(nonempty![name("Negative"), name("SettlesAgainst")]);
         assert!(th.0.morphisms_are_equal(neg_against, name("Settles").into()));
+    }
+
+    #[test]
+    fn nullable_prediction_markets() {
+        // The load-bearing check: `Zero ; SettlesAgainst = Annuls` is NOT a
+        // generating equation. It must be derivable via
+        //   Zero ; SettlesAgainst = Zero ; Negative ; Settles
+        //                         = Zero ; Settles = Annuls,
+        // witnessing that annulment absorbs sign without extra axioms.
+        let th = th_nullable_prediction_market();
+        let zero_against = Path::Seq(nonempty![name("Zero"), name("SettlesAgainst")]);
+        assert!(th.0.morphisms_are_equal(zero_against, name("Annuls").into()));
+        // Sign still acts faithfully away from Zero.
+        let neg_against = Path::Seq(nonempty![name("Negative"), name("SettlesAgainst")]);
+        assert!(th.0.morphisms_are_equal(neg_against, name("Settles").into()));
+        // And a doubly-dead path stays annulled.
+        let dead = Path::Seq(nonempty![name("Zero"), name("Zero"), name("Settles")]);
+        assert!(th.0.morphisms_are_equal(dead, name("Annuls").into()));
     }
 
     #[test]

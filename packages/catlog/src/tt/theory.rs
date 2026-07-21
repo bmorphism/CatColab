@@ -305,6 +305,10 @@ pub fn std_theories() -> HashMap<QualifiedName, Theory> {
         (name("ThCategory"), TheoryDef::discrete(theories::th_category())),
         (name("ThSignedCategory"), TheoryDef::discrete(theories::th_signed_category())),
         (name("ThPredictionMarket"), TheoryDef::discrete(theories::th_prediction_market())),
+        (
+            name("ThNullablePredictionMarket"),
+            TheoryDef::discrete(theories::th_nullable_prediction_market()),
+        ),
         (name("ThCategoryLinks"), TheoryDef::discrete_tab(theories::th_category_links())),
         (name("ThMulticategory"), TheoryDef::modal_unital(theories::th_multicategory())),
         (
