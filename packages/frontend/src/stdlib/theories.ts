@@ -89,8 +89,8 @@ stdTheories.add(
 stdTheories.add(
     {
         id: "prediction-market",
-        name: "Prediction market",
-        description: "Claims, signed exposures, and settled outcomes",
+        name: "PredictionMarket",
+        description: "Claims, evidence-backed completion, and settled outcomes",
         iconLetters: ["P", "m"],
         group: "Economics",
     },

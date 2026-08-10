@@ -6,11 +6,15 @@ import * as analyses from "../analyses";
 
 const ObjectCellEditor = lazy(() => import("../../model/object_cell_editor"));
 const MorphismCellEditor = lazy(() => import("../../model/morphism_cell_editor"));
+const BountyCompletion = lazy(() => import("../analyses/bounty_completion"));
 
 /** The theory of prediction markets.
 
 A market graph is a signed category of open claims together with a settlement
-pole: resolution edges send claims to settled outcomes. Coherent prices are the
+pole: resolution edges send claims to settled outcomes. A bounty completion is
+represented by one outcome and one claim per acceptance criterion: satisfied
+criteria settle for it, disproved criteria settle against it, and criteria with
+insufficient evidence remain open. Coherent prices are the
 harmonic (martingale) labelings extending the settled boundary; Dutch books are
 sign-inconsistent claim cycles. Valuation is an analysis, never model data.
  */
@@ -82,6 +86,13 @@ export default function createPredictionMarketTheory(theoryMeta: TheoryMeta): Th
             },
         ],
         modelAnalyses: [
+            {
+                id: "bounty-completion",
+                name: "Bounty completion",
+                description: "Show confirmed, rejected, and still-open acceptance criteria",
+                component: BountyCompletion,
+                initialContent: () => ({}),
+            },
             analyses.modelGraph({
                 id: "diagram",
                 name: "Visualization",

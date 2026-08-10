@@ -57,6 +57,58 @@ pub fn coherent_claim_loop(th: Rc<DiscreteDblTheory>) -> DiscreteDblModel {
     loop_of_type(th, name("Claim"), Path::Id(name("Claim")))
 }
 
+/// Verdict assigned to one criterion of a bounty completion object.
+///
+/// `Open` is deliberately represented by the absence of a settlement
+/// morphism.  It must not be collapsed into either success or failure.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum CompletionVerdict {
+    /// Evidence satisfies the criterion.
+    Confirmed,
+    /// Evidence disproves the criterion.
+    Rejected,
+    /// Available evidence does not settle the criterion.
+    Open,
+}
+
+/// Construct the expected-completion object for an evidence-backed bounty.
+///
+/// Each named criterion is a `Claim`. Confirmed criteria settle for the
+/// shared `completion` outcome, rejected criteria settle against it, and open
+/// criteria have no settlement edge. Thus the returned market is a view of
+/// the evidence currently available, not an oracle that manufactures a final
+/// answer.
+pub fn bounty_completion<I>(
+    th: Rc<DiscreteDblTheory>,
+    criteria: I,
+) -> DiscreteDblModel
+where
+    I: IntoIterator<Item = (QualifiedName, CompletionVerdict)>,
+{
+    let mut market = DiscreteDblModel::new(th);
+    let completion = name("completion");
+    market.add_ob(completion.clone(), name("Outcome"));
+
+    for (criterion, verdict) in criteria {
+        market.add_ob(criterion.clone(), name("Claim"));
+        let settlement = match verdict {
+            CompletionVerdict::Confirmed => Some(("confirmed", "Settles")),
+            CompletionVerdict::Rejected => Some(("rejected", "SettlesAgainst")),
+            CompletionVerdict::Open => None,
+        };
+        if let Some((prefix, mor_type)) = settlement {
+            let settlement_name = format!("{prefix}_{criterion}");
+            market.add_mor(
+                name(settlement_name.as_str()),
+                criterion,
+                completion.clone(),
+                name(mor_type).into(),
+            );
+        }
+    }
+    market
+}
+
 /// Creates a self-loop with given object and morphism types.
 fn loop_of_type(
     th: Rc<DiscreteDblTheory>,
@@ -260,6 +312,7 @@ pub fn lotka_volterra_dynamics(th: Rc<ModalDblTheory<NonUnital>>) -> ModalDblMod
 mod tests {
     use super::super::theories::*;
     use super::*;
+    use crate::one::category::FgCategory;
     use crate::validate::Validate;
 
     #[test]
@@ -359,6 +412,37 @@ mod tests {
         market.add_mor(name("escape_no"), name("addiction_escape"),
             name("audit_2024"), name("SettlesAgainst").into());
         assert!(market.validate().is_ok());
+    }
+
+    #[test]
+    fn hdmi_bounty_completion_preserves_unknowns() {
+        let th = Rc::new(th_prediction_market());
+        let mut market = bounty_completion(
+            th,
+            [
+                (name("visible_output"), CompletionVerdict::Confirmed),
+                (name("mode_list"), CompletionVerdict::Confirmed),
+                (name("forced_wrong_mode"), CompletionVerdict::Rejected),
+                (name("live_edid"), CompletionVerdict::Open),
+                (name("sink_identity"), CompletionVerdict::Open),
+            ],
+        );
+        market.add_mor(
+            name("edid_identifies_sink"),
+            name("live_edid"),
+            name("sink_identity"),
+            Path::Id(name("Claim")),
+        );
+        market.add_mor(
+            name("mode_enables_output"),
+            name("mode_list"),
+            name("visible_output"),
+            Path::Id(name("Claim")),
+        );
+
+        assert!(market.validate().is_ok());
+        assert_eq!(market.ob_generators().count(), 6);
+        assert_eq!(market.mor_generators().count(), 5);
     }
 
     #[test]
