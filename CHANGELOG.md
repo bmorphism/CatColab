@@ -9,6 +9,36 @@ announcement and a blog post. Minor versions are not announced but allow
 features and fixes to be released with greater frequency. Minor versions often
 include notable new features.
 
+## [Unreleased]
+
+### Added
+
+- Finding motifs---positive, negative, and indeterminate loops---in causal loop
+  diagrams with indeterminate polarities
+  ([#1354](https://github.com/ToposInstitute/CatColab/pull/1354))
+- Fixing a random seed in the stochastic mass-action analysis for Petri nets and
+  stock-flow diagrams
+  ([#1343](https://github.com/ToposInstitute/CatColab/pull/1343))
+
+### Fixed
+
+- Exporting, importing, and duplicating notebooks now preserves rich text;
+  previously, rich text annotations were lost when round-tripping Automerge
+  documents through JSON
+  ([#1341](https://github.com/ToposInstitute/CatColab/pull/1341))
+
+## [v0.6.1](https://github.com/ToposInstitute/CatColab/releases/tag/v0.6.1) (2026-07-15)
+
+### Added
+
+- Button to stochastic mass-action analysis that re-runs the simulation
+  ([#1337](https://github.com/ToposInstitute/CatColab/pull/1337))
+
+### Changed
+
+- Usability improvements to list editor such as showing an empty input at the
+  end ([#1326](https://github.com/ToposInstitute/CatColab/pull/1326))
+
 ## [v0.6.0](https://github.com/ToposInstitute/CatColab/releases/tag/v0.6.0) (2026-05-27)
 
 Blog post: [CatColab v0.6:

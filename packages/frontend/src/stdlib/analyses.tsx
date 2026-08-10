@@ -249,6 +249,7 @@ export function stochasticMassAction(
         initialContent: () => ({
             rates: {},
             initialValues: {},
+            seed: null,
             duration: 10,
         }),
     };
@@ -288,6 +289,7 @@ export function motifFinding(
         component: (props) => <SubmodelGraphs title={name} findSubmodels={findMotifs} {...props} />,
         initialContent: () => ({
             activeIndex: 0,
+            enableMaxPathLength: true,
             maxPathLength: 5,
         }),
     };

@@ -62,6 +62,7 @@
         "js-file-download": "^0.4.12",
         "katex": "^0.16.22",
         "lucide-solid": "^0.471.0",
+        "openai": "^6.45.0",
         "prosemirror-commands": "^1.7.1",
         "prosemirror-inputrules": "^1.5.0",
         "prosemirror-keymap": "^1.2.3",
@@ -77,6 +78,7 @@
         "uuid": "^13.0.0"
     },
     "devDependencies": {
+        "@catcolab-dev-tools/oxlint-plugin-catcolab": "link:../../tools/oxlint-plugin-catcolab",
         "@catcolab-dev-tools/vite-plugin-monorepo-dedupe": "link:../../tools/vite-plugin-monorepo-dedupe",
         "@mdx-js/mdx": "^2.3.0",
         "@types/html-escaper": "^3.0.4",

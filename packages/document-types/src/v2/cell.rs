@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use tsify::{Tsify, declare};
 use uuid::Uuid;
 
+use super::rich_text::RichTextContent;
 use crate::v1;
 
 /// A cell in a notebook.
@@ -12,12 +13,19 @@ use crate::v1;
 #[serde(tag = "tag")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub enum NotebookCell<T> {
+    /// A rich-text cell.
     #[serde(rename = "rich-text")]
-    RichText { id: Uuid, content: String },
+    RichText { id: Uuid, content: RichTextContent },
     #[serde(rename = "formal")]
-    Formal { id: Uuid, content: T },
+    Formal {
+        /// The ID of the cell.
+        id: Uuid,
+        /// The formal content of the cell.
+        content: T,
+    },
 }
 
+/// Short-hand declaration for readability.
 #[declare]
 pub type Cell<T> = NotebookCell<T>;
 
@@ -30,7 +38,7 @@ impl<T> NotebookCell<T> {
     pub fn migrate_from_v1(old: v1::NotebookCell<T>) -> Option<Self> {
         match old {
             v1::NotebookCell::RichText { id, content } => {
-                Some(NotebookCell::RichText { id, content })
+                Some(NotebookCell::RichText { id, content: content.into() })
             }
             v1::NotebookCell::Formal { id, content } => Some(NotebookCell::Formal { id, content }),
             v1::NotebookCell::Stem { .. } => None,
@@ -42,6 +50,7 @@ impl<T> NotebookCell<T> {
 #[cfg(feature = "property-tests")]
 pub(crate) mod arbitrary {
     use super::*;
+    use crate::v2::rich_text::arbitrary::arb_rich_text;
     use proptest::prelude::*;
     use uuid::Uuid;
 
@@ -54,7 +63,7 @@ pub(crate) mod arbitrary {
         arb_t: impl Strategy<Value = T> + Clone + 'static,
     ) -> BoxedStrategy<NotebookCell<T>> {
         prop_oneof![
-            (arb_uuid(), any::<String>())
+            (arb_uuid(), arb_rich_text())
                 .prop_map(|(id, content)| NotebookCell::RichText { id, content }),
             (arb_uuid(), arb_t).prop_map(|(id, content)| NotebookCell::Formal { id, content }),
         ]

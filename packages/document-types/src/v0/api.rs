@@ -57,6 +57,12 @@ pub enum LinkType {
     #[serde(rename = "diagram-in")]
     DiagramIn,
 
+    #[serde(rename = "instance-of")]
+    InstanceOf,
+
+    #[serde(rename = "llmconversation-of")]
+    ConversationOf,
+
     #[serde(rename = "instantiation")]
     Instantiation,
 }
@@ -75,6 +81,7 @@ pub(crate) mod arbitrary {
             proptest::sample::select(&[
                 LinkType::AnalysisOf,
                 LinkType::DiagramIn,
+                LinkType::ConversationOf,
                 LinkType::Instantiation,
             ])
             .boxed()

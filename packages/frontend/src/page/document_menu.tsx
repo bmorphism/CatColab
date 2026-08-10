@@ -60,7 +60,10 @@ export function DocumentMenu(props: {
     const onNewAnalysis = async () => {
         const docRefId = props.docRef.refId;
         const docType = props.liveDoc.doc.type;
-        invariant(docType !== "analysis", "Analysis cannot be created on other analysis");
+        invariant(
+            docType === "model" || docType === "diagram",
+            () => `Cannot create analysis of ${docType} document`,
+        );
 
         const newRef = await createAnalysis(api, docType, api.makeUnversionedRef(docRefId));
         handleDocCreated("analysis", newRef);
@@ -114,7 +117,7 @@ export function DocumentMenu(props: {
                             </MenuItem>
                         </Match>
                     </Switch>
-                    <Show when={props.liveDoc.doc.type !== "analysis"}>
+                    <Show when={docType() === "model" || docType() === "diagram"}>
                         <MenuItem onSelect={() => onNewAnalysis()}>
                             <DocumentTypeIcon documentType="analysis" />
                             <MenuItemLabel>{`New analysis of this ${docType()}`}</MenuItemLabel>
@@ -123,9 +126,9 @@ export function DocumentMenu(props: {
                     <Show when={showSeparator()}>
                         <MenuSeparator />
                     </Show>
-                    <DuplicateMenuItem doc={props.liveDoc.doc} />
-                    <ExportJSONMenuItem doc={props.liveDoc.doc} />
-                    <CopyJSONMenuItem doc={props.liveDoc.doc} />
+                    <DuplicateMenuItem liveDoc={props.liveDoc} />
+                    <ExportJSONMenuItem liveDoc={props.liveDoc} />
+                    <CopyJSONMenuItem liveDoc={props.liveDoc} />
                     <MenuSeparator />
                     <Switch>
                         <Match when={canRestore()}>
